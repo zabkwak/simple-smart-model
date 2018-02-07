@@ -1,6 +1,6 @@
 {
   "name": "simple-smart-model",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Module to work with data types in the memory.",
   "main": "index.js",
   "scripts": {
@@ -9,6 +9,20 @@
     "postpublish": "rm -rf ./dist && rm -f ./index.js"
   },
   "author": "Lukáš Mačuda <lukas.macuda@gmail.com>",
+  "engines": {
+    "node": ">=4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zabkwak/simple-smart-model.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zabkwak/simple-smart-model/issues"
+  },
+  "homepage": "https://github.com/zabkwak/simple-smart-model#readme",
+  "keywords": [
+    "smart", "simple", "model", "data-types"
+  ],
   "license": "MIT",
   "dependencies": {
     "smart-error": "^1.1.3"
