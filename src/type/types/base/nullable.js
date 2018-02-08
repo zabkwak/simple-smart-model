@@ -1,6 +1,6 @@
 import Error from 'smart-error';
 
-import Base from './base';
+import Base from './';
 
 export default class Nullable extends Base {
 

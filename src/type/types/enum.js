@@ -1,6 +1,6 @@
 import SmartError from 'smart-error';
 
-import Base from '../base';
+import Base from './base';
 
 export default class Enum extends Base {
 
@@ -18,6 +18,10 @@ export default class Enum extends Base {
         this.values = values;
     }
 
+    /**
+     * 
+     * @param {string} value 
+     */
     cast(value) {
         if (!value || this.values.indexOf(value.toString().trim()) < 0) {
             this._throwInvalidCast(value);

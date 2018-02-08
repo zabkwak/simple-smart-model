@@ -1,4 +1,4 @@
-import BaseType from './type/base';
+import BaseType from './type/types/base/';
 
 export default class Property {
 

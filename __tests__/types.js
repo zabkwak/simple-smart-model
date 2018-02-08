@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import Error from 'smart-error';
 import { Type } from '../src';
-import BaseType from '../src/type/base';
+import BaseType from '../src/type/types/base';
 
 const castError = (type, value) => {
     expect(type.cast.bind(type, value)).to.throw(Error).that.has.property('code', 'ERR_INVALID_CAST');
