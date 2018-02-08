@@ -4,11 +4,6 @@ import uniqid from 'uniqid';
 import BaseType from './type/base';
 import Property from './property';
 
-/**
- * @type {Object.<string, Property[]>}
- */
-const _properties = {};
-
 export default class BaseModel {
 
     _data = {};
@@ -16,6 +11,7 @@ export default class BaseModel {
 
     /**
      * Unique identificator of the class.
+     * 
      * @type {string}
      */
     static get id() {
@@ -23,6 +19,18 @@ export default class BaseModel {
             this.__id__ = uniqid();
         }
         return this.__id__;
+    }
+
+    /**
+     * List of assigned properties.
+     * 
+     * @type {Property[]}
+     */
+    static get _properties() {
+        if (!this.hasOwnProperty('__properties__')) {
+            this.__properties__ = [...(this.__proto__._properties || [])];
+        }
+        return this.__properties__;
     }
 
     /**
@@ -37,22 +45,8 @@ export default class BaseModel {
         if (!(type instanceof BaseType)) {
             throw new Error('type is not instance of BaseType', 'unsupported_operation');
         }
-        if (!_properties[this.id]) {
-            _properties[this.id] = [];
-        }
-        _properties[this.id].push(new Property(name, type, required, defaultValue));
+        this._properties.push(new Property(name, type, required, defaultValue));
         return this;
-    }
-
-    /**
-     * Gets the list of the properties assigned to the model and its parent class.
-     * 
-     * @returns {Property[]}
-     */
-    static getProperties() {
-        const parentProperties = this.__proto__.getProperties ? this.__proto__.getProperties() : [];
-        const childProperties = _properties[this.id] || [];
-        return parentProperties.concat(childProperties);
     }
 
     constructor() {
@@ -146,6 +140,6 @@ export default class BaseModel {
      * @returns {Property[]}
      */
     _getProperties() {
-        return this.constructor.getProperties();
+        return this.constructor._properties;
     }
 }
