@@ -65,7 +65,7 @@ export default class BaseModel {
     /**
      * Gets the object of the fields of the model.
      * 
-     * @param {string[]} [fields] list of field names
+     * @param {string[]} fields list of field names
      * @returns {Object}
      */
     toJSON(fields = null) {

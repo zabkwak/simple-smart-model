@@ -1,4 +1,4 @@
-import Base from './base.numeric';
+import Base from '../base.numeric';
 
 export default class Float extends Base {
 

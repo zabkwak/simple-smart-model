@@ -1,6 +1,6 @@
 import Error from 'smart-error';
 
-import Base from './base.nullable';
+import Base from '../base.nullable';
 
 export default class String extends Base {
 

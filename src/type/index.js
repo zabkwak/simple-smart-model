@@ -1,9 +1,9 @@
-import Integer from './integer';
-import Float from './float';
-import String from './string';
-import DateType from './date';
-import BooleanType from './boolean';
-import Enum from './enum';
+import Integer from './types/integer';
+import Float from './types/float';
+import String from './types/string';
+import DateType from './types/date';
+import BooleanType from './types/boolean';
+import Enum from './types/enum';
 
 export default {
     integer: new Integer(),
