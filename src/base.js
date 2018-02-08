@@ -39,7 +39,7 @@ export default class BaseModel {
      * @param {string} name 
      * @param {BaseType} type 
      * @param {boolean} required 
-     * @param {any} defaultValue 
+     * @param {*} defaultValue 
      */
     static addProperty(name, type, required = false, defaultValue = null) {
         if (!(type instanceof BaseType)) {
@@ -50,15 +50,7 @@ export default class BaseModel {
     }
 
     constructor() {
-        this._getProperties().forEach((property) => {
-            const key = property.name;
-            Object.defineProperty(this, key, {
-                set: (value) => this._changed[key] = property.cast(value),
-                get: () => this._get(key),
-                enumerable: true,
-                configurable: false
-            });
-        });
+        this._setProperties();
     }
 
     /**
@@ -118,6 +110,7 @@ export default class BaseModel {
     }
 
     /**
+     * Gets the property from the assigned properties by its key.
      * 
      * @param {string} key 
      * @returns {Property}
@@ -132,6 +125,21 @@ export default class BaseModel {
         }
         // This cannot happened
         throw new Error('Invalid property key', 'unsupported_operation');
+    }
+
+    /**
+     * Sets the assigned properties to the instance.
+     */
+    _setProperties() {
+        this._getProperties().forEach((property) => {
+            const key = property.name;
+            Object.defineProperty(this, key, {
+                set: (value) => this._changed[key] = property.cast(value),
+                get: () => this._get(key),
+                enumerable: true,
+                configurable: false
+            });
+        });
     }
 
     /**
