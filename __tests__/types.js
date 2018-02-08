@@ -63,3 +63,36 @@ describe('Integer type', () => {
         done();
     });
 });
+
+describe('Boolean type', () => {
+
+    it('casts the number value to boolean', (done) => {
+        expect(Type.boolean.cast(5)).to.be.true;
+        done();
+    });
+
+    it('casts the number as string value to boolean', (done) => {
+        expect(Type.boolean.cast('5')).to.be.true;
+        done();
+    });
+
+    it('casts 0 to boolean', (done) => {
+        expect(Type.boolean.cast(0)).to.be.false;
+        done();
+    });
+
+    it('casts 0 as string value to boolean', (done) => {
+        expect(Type.boolean.cast('0')).to.be.false;
+        done();
+    });
+
+    it('casts string true to boolean', (done) => {
+        expect(Type.boolean.cast('true')).to.be.true;
+        done();
+    });
+
+    it('casts string false to boolean', (done) => {
+        expect(Type.boolean.cast('false')).to.be.false;
+        done();
+    });
+});

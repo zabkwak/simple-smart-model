@@ -19,10 +19,9 @@ export default class BaseModel {
      * @type {string}
      */
     static get id() {
-        if (this.hasOwnProperty('__id__')) {
-            return this.__id__;
+        if (!this.hasOwnProperty('__id__')) {
+            this.__id__ = uniqid();
         }
-        this.__id__ = uniqid();
         return this.__id__;
     }
 
