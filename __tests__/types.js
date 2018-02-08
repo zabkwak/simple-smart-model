@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 import Error from 'smart-error';
 import { Type } from '../src';
+import BaseType from '../src/type/base';
 
 const castError = (type, value) => {
     expect(type.cast.bind(type, value)).to.throw(Error).that.has.property('code', 'ERR_INVALID_CAST');
@@ -93,6 +94,30 @@ describe('Boolean type', () => {
 
     it('casts string false to boolean', (done) => {
         expect(Type.boolean.cast('false')).to.be.false;
+        done();
+    });
+});
+
+describe('Enum type', () => {
+
+    const en = Type.enum('test', 'test', 'baf');
+
+    it('checks if enum has all values', (done) => {
+        expect(en).to.be.an.instanceOf(BaseType);
+        expect(en.defaultValue).to.be.equal('test');
+        expect(en.values).to.have.all.members(['test', 'baf']);
+        done(); 
+    });
+
+    // TODO better describe
+    it('casts the value to the enum', (done) => {
+        expect(en.cast('test')).to.be.equal('test');
+        done();
+    });
+
+    // TODO better describe
+    it('tries to cast invalid value of the enum', (done) => {
+        castError(en, 'lek');
         done();
     });
 });
