@@ -241,3 +241,59 @@ describe('toString', () => {
         done();
     });
 });
+
+describe('Inheritance', () => {
+
+    class ChildModel extends BaseModel { }
+    ChildModel.addProperty('child_property', Type.string);
+
+    it('creates a sub-class with new property', (done) => {
+        const parent = new BaseModel();
+        const child = new ChildModel();
+        expect(parent).to.be.an('object');
+        expect(parent).to.be.an.instanceOf(BaseModel);
+        expect(parent).to.have.all.keys(['integer', 'float', 'string', 'definedDefaultInteger', 'definedDefaultFloat', 'definedDefaultString', '_data', '_changed']);
+
+        expect(child).to.be.an('object');
+        expect(child).to.be.an.instanceOf(BaseModel);
+        expect(child).to.be.an.instanceOf(ChildModel);
+        expect(child).to.have.all.keys(['integer', 'float', 'string', 'definedDefaultInteger', 'definedDefaultFloat', 'definedDefaultString', 'child_property', '_data', '_changed']);
+
+        done();
+    });
+
+    it('creates a sub-class of the sub-class', (done) => {
+        const parent = new ChildModel();
+        class ChildChildModel extends ChildModel { }
+        ChildChildModel.addProperty('child_child_property', Type.string);
+        const child = new ChildChildModel();
+        expect(parent).to.be.an('object');
+        expect(parent).to.be.an.instanceOf(BaseModel);
+        expect(child).to.be.an.instanceOf(ChildModel);
+        expect(parent).to.have.all.keys(['integer', 'float', 'string', 'definedDefaultInteger', 'definedDefaultFloat', 'definedDefaultString', 'child_property', '_data', '_changed']);
+
+        expect(child).to.be.an('object');
+        expect(child).to.be.an.instanceOf(BaseModel);
+        expect(child).to.be.an.instanceOf(ChildModel);
+        expect(child).to.be.an.instanceOf(ChildChildModel);
+        expect(child).to.have.all.keys(['integer', 'float', 'string', 'definedDefaultInteger', 'definedDefaultFloat', 'definedDefaultString', 'child_property', 'child_child_property', '_data', '_changed']);
+
+        done();
+    });
+
+    it('creates a sub-class of the base class with new property', (done) => {
+        const parent = new BaseModel();
+        class ChildChildModel extends BaseModel { }
+        const child = new ChildChildModel();
+        expect(parent).to.be.an('object');
+        expect(parent).to.be.an.instanceOf(BaseModel);
+        expect(parent).to.have.all.keys(['integer', 'float', 'string', 'definedDefaultInteger', 'definedDefaultFloat', 'definedDefaultString', '_data', '_changed']);
+
+        expect(child).to.be.an('object');
+        expect(child).to.be.an.instanceOf(BaseModel);
+        expect(child).to.be.an.instanceOf(ChildChildModel);
+        expect(child).to.have.all.keys(['integer', 'float', 'string', 'definedDefaultInteger', 'definedDefaultFloat', 'definedDefaultString', '_data', '_changed']);
+
+        done();
+    });
+});
