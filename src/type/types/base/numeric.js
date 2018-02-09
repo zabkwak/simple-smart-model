@@ -4,6 +4,11 @@ import Base from './';
 
 export default class Numeric extends Base {
 
+    /**
+     * 
+     * @param {*} value 
+     * @returns {number}
+     */
     cast(value) {
         if (value instanceof Array) {
             this._throwInvalidCast(value);

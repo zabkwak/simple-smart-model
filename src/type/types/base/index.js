@@ -10,6 +10,11 @@ export default class Type {
         return this.constructor.name;
     }
 
+    /**
+     * 
+     * @param {*} value 
+     * @throws {Error}
+     */
     _throwInvalidCast(value) {
         throw new Error(`Value ${value} cannot be cast to ${this.getName().toLowerCase()}`, 'invalid_cast');
     }

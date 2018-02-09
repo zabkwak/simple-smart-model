@@ -21,9 +21,14 @@ export default class Enum extends Base {
     /**
      * 
      * @param {string} value 
+     * @returns {string}
      */
     cast(value) {
-        if (!value || this.values.indexOf(value.toString().trim()) < 0) {
+        if (typeof value !== 'string') {
+            value = value.toString();
+        }
+        value = value.trim();
+        if (!value || this.values.indexOf(value) < 0) {
             this._throwInvalidCast(value);
         }
         return value;
