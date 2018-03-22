@@ -1,6 +1,6 @@
 {
   "name": "simple-smart-model",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Module to work with data types in the memory.",
   "main": "index.js",
   "scripts": {

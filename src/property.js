@@ -13,15 +13,7 @@ export default class Property {
         this.name = name;
         this.type = type;
         this.required = required;
-        try {
-            this.defaultValue = type.cast(defaultValue);
-        } catch (e) {
-            if (e.code === 'ERR_INVALID_CAST') {
-                this.defaultValue = type.getDefaultValue();
-                return;
-            }
-            throw e;
-        }
+        this.defaultValue = type.isValid(defaultValue) ? type.cast(defaultValue) : type.getDefaultValue();
     }
 
     cast(value) {

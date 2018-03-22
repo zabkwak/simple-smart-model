@@ -10,6 +10,15 @@ export default class Type {
         return this.constructor.name;
     }
 
+    isValid(value) {
+        try {
+            this.cast(value);
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
     /**
      * 
      * @param {*} value 

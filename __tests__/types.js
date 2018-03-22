@@ -9,93 +9,51 @@ const castError = (type, value) => {
 
 describe('Integer type', () => {
 
-    it('casts integer value to integer', (done) => {
-        expect(Type.integer.cast(5)).to.be.equal(5);
-        done();
+    // Línej programátor
+    const valid = [5, '5', 5.5, '5abc'];
+    const invalid = [null, undefined, 'abc5', new Date(), { a: 5 }, [5], { 5: 5 }];
+
+    it('checks the validators', () => {
+        valid.forEach(value => expect(Type.integer.isValid(value)).to.be.true);
+        invalid.forEach(value => expect(Type.integer.isValid(value)).to.be.false);
     });
 
-    it('casts number as a string to integer', (done) => {
-        expect(Type.integer.cast('5')).to.be.equal(5);
-        done();
-    });
-
-    it('casts float value to integer', (done) => {
-        expect(Type.integer.cast(5.5)).to.be.equal(5);
-        done();
-    });
-
-    it('casts valid string value to integer', (done) => {
-        expect(Type.integer.cast('5abc')).to.be.equal(5);
-        done();
-    });
-
-    it('tries to cast null to integer', (done) => {
-        castError(Type.integer, null);
-        done();
-    });
-
-    it('tries to cast undefined to integer', (done) => {
-        castError(Type.integer, undefined);
-        done();
-    });
-
-    it('tries to cast invalid string to integer', (done) => {
-        castError(Type.integer, 'abc5');
-        done();
-    });
-
-    it('tries to cast Date instance to integer', (done) => {
-        castError(Type.integer, new Date());
-        done();
-    });
-
-    it('tries to cast object to integer', (done) => {
-        castError(Type.integer, { a: 5 });
-        done();
-    });
-
-    it('tries to cast array to integer', (done) => {
-        castError(Type.integer, [5]);
-        done();
-    });
-
-    it('tries to cast object with numeric key to integer', (done) => {
-        castError(Type.integer, { 5: 5 });
-        done();
+    it('casts the values to the integer', () => {
+        valid.forEach(value => expect(Type.integer.cast(value)).to.be.equal(5));
+        invalid.forEach(value => expect(castError(Type.integer, value)));
     });
 });
 
 describe('Boolean type', () => {
 
-    it('casts the number value to boolean', (done) => {
-        expect(Type.boolean.cast(5)).to.be.true;
-        done();
+    const t = [5, '5', 'true'];
+    const f = [0, '0', 'false'];
+
+    it('checks the validators', () => {
+        t.forEach(value => expect(Type.boolean.isValid(value)).to.be.true);
+        f.forEach(value => expect(Type.boolean.isValid(value)).to.be.true);
     });
 
-    it('casts the number as string value to boolean', (done) => {
-        expect(Type.boolean.cast('5')).to.be.true;
-        done();
+    it('casts the values to the integer', () => {
+        t.forEach(value => expect(Type.boolean.cast(value)).to.be.true);
+        f.forEach(value => expect(Type.boolean.cast(value)).to.be.false);
+    });
+});
+
+describe('Object type', () => {
+
+    const valid = [null, {}, { a: 5 }, [], [5]];
+    const invalid = [undefined, true, false, 5, 5.5];
+
+    it('checks the validators', () => {
+        valid.forEach(value => expect(Type.object.isValid(value)).to.be.true);
+        invalid.forEach(value => expect(Type.object.isValid(value)).to.be.false);
     });
 
-    it('casts 0 to boolean', (done) => {
-        expect(Type.boolean.cast(0)).to.be.false;
-        done();
-    });
-
-    it('casts 0 as string value to boolean', (done) => {
-        expect(Type.boolean.cast('0')).to.be.false;
-        done();
-    });
-
-    it('casts string true to boolean', (done) => {
-        expect(Type.boolean.cast('true')).to.be.true;
-        done();
-    });
-
-    it('casts string false to boolean', (done) => {
-        expect(Type.boolean.cast('false')).to.be.false;
-        done();
-    });
+    /*it('casts the values to the integer', () => {
+        t.forEach(value => expect(Type.boolean.cast(value)).to.be.true);
+        f.forEach(value => expect(Type.boolean.cast(value)).to.be.false);
+    });*/
 });
 
 describe('Enum type', () => {
@@ -106,7 +64,7 @@ describe('Enum type', () => {
         expect(en).to.be.an.instanceOf(BaseType);
         expect(en.defaultValue).to.be.equal('test');
         expect(en.values).to.have.all.members(['test', 'baf']);
-        done(); 
+        done();
     });
 
     // TODO better describe

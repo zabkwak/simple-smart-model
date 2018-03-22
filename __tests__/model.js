@@ -2,6 +2,7 @@ import { expect } from 'chai';
 
 import { BaseModel, Type } from '../src';
 
+// TODO remove done
 // TODO chai throw function
 const validateError = (error, code) => {
     code = `ERR_${code.toUpperCase()}`;
@@ -16,9 +17,15 @@ BaseModel
     .addProperty('float', Type.float)
     .addProperty('string', Type.string)
     .addProperty('boolean', Type.boolean)
+    .addProperty('object', Type.object)
     .addProperty('definedDefaultInteger', Type.integer, false, -1)
     .addProperty('definedDefaultFloat', Type.float, false, -0.99)
-    .addProperty('definedDefaultString', Type.string, false, 'default string');
+    .addProperty('definedDefaultString', Type.string, false, 'default string')
+    .addProperty('definedDefaultObject', Type.object, false, {});
+
+const fields = ['integer', 'float', 'string', 'boolean', 'object', 'definedDefaultInteger', 'definedDefaultFloat', 'definedDefaultString', 'definedDefaultObject'];
+
+const json = '{"integer":0,"float":0,"string":null,"boolean":false,"object":null,"definedDefaultInteger":-1,"definedDefaultFloat":-0.99,"definedDefaultString":"default string","definedDefaultObject":{}}';
 
 describe('Model properties', () => {
 
@@ -26,7 +33,7 @@ describe('Model properties', () => {
         const instance = new BaseModel();
         expect(instance).to.be.an('object');
         expect(instance).to.be.an.instanceOf(BaseModel);
-        expect(instance).to.have.all.keys(['integer', 'float', 'string', 'boolean', 'definedDefaultInteger', 'definedDefaultFloat', 'definedDefaultString', '_data', '_changed']);
+        expect(instance).to.have.all.keys(fields.concat(['_data', '_changed']));
         done();
     });
 });
@@ -55,6 +62,12 @@ describe('Model default values', () => {
 
     it('checks if the instance of the model has boolean default values', (done) => {
         expect(instance.boolean).to.be.false;
+        done();
+    });
+
+    it('checks if the instance of the model has object default values', (done) => {
+        expect(instance.object).to.be.null;
+        expect(JSON.stringify(instance.definedDefaultObject)).to.be.equal('{}');
         done();
     });
 });
@@ -174,6 +187,51 @@ describe('Model setters', () => {
             done();
         });
     });
+
+    describe('object', () => {
+
+        it('sets the empty object to object field', () => {
+            instance.object = {};
+            expect(JSON.stringify(instance.object)).to.be.equal('{}');
+        });
+
+        it('sets the array to object field', () => {
+            instance.object = [];
+            expect(JSON.stringify(instance.object)).to.be.equal('[]');
+        });
+
+        it('tries to set integer value to object field', () => {
+            try {
+                instance.object = 5;
+            } catch (e) {
+                validateError(e, 'invalid_cast');
+            }
+        });
+
+        it('tries to set integer value to object field', () => {
+            try {
+                instance.object = 5;
+            } catch (e) {
+                validateError(e, 'invalid_cast');
+            }
+        });
+
+        it('tries to set string value to object field', () => {
+            try {
+                instance.object = 'string';
+            } catch (e) {
+                validateError(e, 'invalid_cast');
+            }
+        });
+
+        it('tries to set boolean value to object field', () => {
+            try {
+                instance.object = true;
+            } catch (e) {
+                validateError(e, 'invalid_cast');
+            }
+        });
+    });
 });
 
 describe('toJSON', () => {
@@ -182,7 +240,7 @@ describe('toJSON', () => {
 
     it('converts the instance to JSON without save', (done) => {
         const o = instance.toJSON();
-        expect(o).to.have.all.keys(['integer', 'float', 'string', 'boolean', 'definedDefaultInteger', 'definedDefaultFloat', 'definedDefaultString']);
+        expect(o).to.have.all.keys(fields);
         expect(o.integer).to.be.equal(0);
         expect(o.float).to.be.equal(0);
         expect(o.string).to.be.null;
@@ -190,13 +248,14 @@ describe('toJSON', () => {
         expect(o.definedDefaultInteger).to.be.equal(-1);
         expect(o.definedDefaultFloat).to.be.equal(-0.99);
         expect(o.definedDefaultString).to.be.equal('default string');
+        expect(JSON.stringify(o.definedDefaultObject)).to.be.equal('{}');
         done();
     });
 
     it('converts the instance to JSON after save without changing any of values', (done) => {
         instance.save();
         const o = instance.toJSON();
-        expect(o).to.have.all.keys(['integer', 'float', 'string', 'boolean', 'definedDefaultInteger', 'definedDefaultFloat', 'definedDefaultString']);
+        expect(o).to.have.all.keys(fields);
         expect(o.integer).to.be.equal(0);
         expect(o.float).to.be.equal(0);
         expect(o.string).to.be.null;
@@ -204,6 +263,7 @@ describe('toJSON', () => {
         expect(o.definedDefaultInteger).to.be.equal(-1);
         expect(o.definedDefaultFloat).to.be.equal(-0.99);
         expect(o.definedDefaultString).to.be.equal('default string');
+        expect(JSON.stringify(o.definedDefaultObject)).to.be.equal('{}');
         done();
     });
 
@@ -211,7 +271,7 @@ describe('toJSON', () => {
         instance.integer = 5;
         instance.save();
         const o = instance.toJSON();
-        expect(o).to.have.all.keys(['integer', 'float', 'string', 'boolean', 'definedDefaultInteger', 'definedDefaultFloat', 'definedDefaultString']);
+        expect(o).to.have.all.keys(fields);
         expect(o.integer).to.be.equal(5);
         expect(o.float).to.be.equal(0);
         expect(o.string).to.be.null;
@@ -219,6 +279,7 @@ describe('toJSON', () => {
         expect(o.definedDefaultInteger).to.be.equal(-1);
         expect(o.definedDefaultFloat).to.be.equal(-0.99);
         expect(o.definedDefaultString).to.be.equal('default string');
+        expect(JSON.stringify(o.definedDefaultObject)).to.be.equal('{}');
         done();
     });
 
@@ -231,7 +292,7 @@ describe('toJSON', () => {
 
     it('converts the instance to JSON without save with string fields attribute', (done) => {
         const o = instance.toJSON('integer');
-        expect(o).to.have.all.keys(['integer', 'float', 'string', 'boolean', 'definedDefaultInteger', 'definedDefaultFloat', 'definedDefaultString']);
+        expect(o).to.have.all.keys(fields);
         expect(o.integer).to.be.equal(5);
         expect(o.float).to.be.equal(0);
         expect(o.string).to.be.null;
@@ -239,6 +300,7 @@ describe('toJSON', () => {
         expect(o.definedDefaultInteger).to.be.equal(-1);
         expect(o.definedDefaultFloat).to.be.equal(-0.99);
         expect(o.definedDefaultString).to.be.equal('default string');
+        expect(JSON.stringify(o.definedDefaultObject)).to.be.equal('{}');
         done();
     });
 });
@@ -248,7 +310,7 @@ describe('toString', () => {
     const instance = new BaseModel();
 
     it('converts the instance to string', (done) => {
-        expect(instance.toString()).to.be.equal('{"integer":0,"float":0,"string":null,"boolean":false,"definedDefaultInteger":-1,"definedDefaultFloat":-0.99,"definedDefaultString":"default string"}');
+        expect(instance.toString()).to.be.equal(json);
         done();
     });
 });
@@ -263,12 +325,12 @@ describe('Inheritance', () => {
         const child = new ChildModel();
         expect(parent).to.be.an('object');
         expect(parent).to.be.an.instanceOf(BaseModel);
-        expect(parent).to.have.all.keys(['integer', 'float', 'string', 'boolean', 'definedDefaultInteger', 'definedDefaultFloat', 'definedDefaultString', '_data', '_changed']);
+        expect(parent).to.have.all.keys(fields.concat(['_data', '_changed']));
 
         expect(child).to.be.an('object');
         expect(child).to.be.an.instanceOf(BaseModel);
         expect(child).to.be.an.instanceOf(ChildModel);
-        expect(child).to.have.all.keys(['integer', 'float', 'string', 'boolean', 'definedDefaultInteger', 'definedDefaultFloat', 'definedDefaultString', 'child_property', '_data', '_changed']);
+        expect(child).to.have.all.keys(fields.concat(['_data', '_changed', 'child_property']));
 
         done();
     });
@@ -281,13 +343,13 @@ describe('Inheritance', () => {
         expect(parent).to.be.an('object');
         expect(parent).to.be.an.instanceOf(BaseModel);
         expect(child).to.be.an.instanceOf(ChildModel);
-        expect(parent).to.have.all.keys(['integer', 'float', 'string', 'boolean', 'definedDefaultInteger', 'definedDefaultFloat', 'definedDefaultString', 'child_property', '_data', '_changed']);
+        expect(parent).to.have.all.keys(fields.concat(['_data', '_changed', 'child_property']));
 
         expect(child).to.be.an('object');
         expect(child).to.be.an.instanceOf(BaseModel);
         expect(child).to.be.an.instanceOf(ChildModel);
         expect(child).to.be.an.instanceOf(ChildChildModel);
-        expect(child).to.have.all.keys(['integer', 'float', 'string', 'boolean', 'definedDefaultInteger', 'definedDefaultFloat', 'definedDefaultString', 'child_property', 'child_child_property', '_data', '_changed']);
+        expect(child).to.have.all.keys(fields.concat(['_data', '_changed', 'child_property', 'child_child_property']));
 
         done();
     });
@@ -298,12 +360,12 @@ describe('Inheritance', () => {
         const child = new ChildChildModel();
         expect(parent).to.be.an('object');
         expect(parent).to.be.an.instanceOf(BaseModel);
-        expect(parent).to.have.all.keys(['integer', 'float', 'string', 'boolean', 'definedDefaultInteger', 'definedDefaultFloat', 'definedDefaultString', '_data', '_changed']);
+        expect(parent).to.have.all.keys(fields.concat(['_data', '_changed']));
 
         expect(child).to.be.an('object');
         expect(child).to.be.an.instanceOf(BaseModel);
         expect(child).to.be.an.instanceOf(ChildChildModel);
-        expect(child).to.have.all.keys(['integer', 'float', 'string', 'boolean', 'definedDefaultInteger', 'definedDefaultFloat', 'definedDefaultString', '_data', '_changed']);
+        expect(child).to.have.all.keys(fields.concat(['_data', '_changed']));
 
         done();
     });
