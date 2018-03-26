@@ -5,6 +5,7 @@ import DateType from './types/date';
 import BooleanType from './types/boolean';
 import ObjectType from './types/object';
 import Enum from './types/enum';
+import Any from './types/any';
 
 export default {
     integer: new Integer(),
@@ -13,6 +14,7 @@ export default {
     date: new DateType(),
     boolean: new BooleanType(),
     object: new ObjectType(),
+    any: new Any(),
     /**
      * 
      * @param {string} defaultValue 

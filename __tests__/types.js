@@ -7,6 +7,19 @@ const castError = (type, value) => {
     expect(type.cast.bind(type, value)).to.throw(Error).that.has.property('code', 'ERR_INVALID_CAST');
 }
 
+describe('Any type', () => {
+
+    const values = [5, '5', 5.5, 'abc', null, undefined, new Date(), { a: 5 }, [5], { 5: 5 }];
+
+    it('checks the validators', () => {
+        values.forEach(value => expect(Type.any.isValid(value)).to.be.true);
+    });
+
+    it('casts the values to the any', () => {
+        values.forEach(value => expect(Type.any.cast(value)).to.be.equal(value));
+    });
+});
+
 describe('Integer type', () => {
 
     const valid = [5, '5', 5.5, '5abc'];
