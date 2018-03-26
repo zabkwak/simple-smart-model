@@ -6,6 +6,7 @@ import BooleanType from './types/boolean';
 import ObjectType from './types/object';
 import Enum from './types/enum';
 import Any from './types/any';
+import InstanceOf from './types/instanceof';
 
 export default {
     integer: new Integer(),
@@ -15,6 +16,7 @@ export default {
     boolean: new BooleanType(),
     object: new ObjectType(),
     any: new Any(),
+    instanceOf: (Class) => new InstanceOf(Class),
     /**
      * 
      * @param {string} defaultValue 

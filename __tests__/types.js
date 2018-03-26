@@ -93,3 +93,19 @@ describe('Enum type', () => {
         done();
     });
 });
+
+describe('InstanceOf type', () => {
+
+    class T {}
+
+    it('checks if the values is instance of defined type', () => {
+        expect(Type.instanceOf(Array).isValid([])).to.be.true;
+        expect(Type.instanceOf(Array).isValid(new Date())).to.be.false;
+
+        expect(Type.instanceOf(Date).isValid(new Date())).to.be.true;
+        expect(Type.instanceOf(Date).isValid([])).to.be.false;
+
+        expect(Type.instanceOf(Error).isValid(new Error())).to.be.true;
+        expect(Type.instanceOf(T).isValid(new T())).to.be.true;
+    });
+});
