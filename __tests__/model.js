@@ -18,15 +18,16 @@ BaseModel
     .addProperty('string', Type.string)
     .addProperty('boolean', Type.boolean)
     .addProperty('object', Type.object)
+    .addProperty('instance', Type.instanceOf(Date))
     .addProperty('definedDefaultInteger', Type.integer, false, -1)
     .addProperty('definedDefaultFloat', Type.float, false, -0.99)
     .addProperty('definedDefaultString', Type.string, false, 'default string')
     .addProperty('definedDefaultBoolean', Type.boolean, false, true)
     .addProperty('definedDefaultObject', Type.object, false, {});
 
-const fields = ['integer', 'float', 'string', 'boolean', 'object', 'definedDefaultInteger', 'definedDefaultFloat', 'definedDefaultString', 'definedDefaultBoolean', 'definedDefaultObject'];
+const fields = ['integer', 'float', 'string', 'boolean', 'object', 'instance', 'definedDefaultInteger', 'definedDefaultFloat', 'definedDefaultString', 'definedDefaultBoolean', 'definedDefaultObject'];
 
-const json = '{"integer":0,"float":0,"string":null,"boolean":false,"object":null,"definedDefaultInteger":-1,"definedDefaultFloat":-0.99,"definedDefaultString":"default string","definedDefaultBoolean":true,"definedDefaultObject":{}}';
+const json = '{"integer":0,"float":0,"string":null,"boolean":false,"object":null,"instance":null,"definedDefaultInteger":-1,"definedDefaultFloat":-0.99,"definedDefaultString":"default string","definedDefaultBoolean":true,"definedDefaultObject":{}}';
 
 describe('Model properties', () => {
 
@@ -71,6 +72,10 @@ describe('Model default values', () => {
         expect(instance.object).to.be.null;
         expect(JSON.stringify(instance.definedDefaultObject)).to.be.equal('{}');
         done();
+    });
+
+    it('checks if the instance of the model has instance default values', () => {
+        expect(instance.instance).to.be.null;
     });
 });
 
@@ -234,6 +239,21 @@ describe('Model setters', () => {
             }
         });
     });
+
+    describe('instance', () => {
+
+        it('sets the current date to the instance field', () => {
+            instance.instance = new Date();
+        });
+
+        it('tries to set integer value to instance field', () => {
+            try {
+                instance.instance = 5;
+            } catch (e) {
+                validateError(e, 'invalid_cast');
+            }
+        });
+    });
 });
 
 describe('toJSON', () => {
@@ -247,6 +267,7 @@ describe('toJSON', () => {
         expect(o.float).to.be.equal(0);
         expect(o.string).to.be.null;
         expect(o.boolean).to.be.false;
+        expect(o.instance).to.be.null;
         expect(o.definedDefaultInteger).to.be.equal(-1);
         expect(o.definedDefaultFloat).to.be.equal(-0.99);
         expect(o.definedDefaultString).to.be.equal('default string');
@@ -262,6 +283,7 @@ describe('toJSON', () => {
         expect(o.float).to.be.equal(0);
         expect(o.string).to.be.null;
         expect(o.boolean).to.be.false;
+        expect(o.instance).to.be.null;
         expect(o.definedDefaultInteger).to.be.equal(-1);
         expect(o.definedDefaultFloat).to.be.equal(-0.99);
         expect(o.definedDefaultString).to.be.equal('default string');
@@ -278,6 +300,7 @@ describe('toJSON', () => {
         expect(o.float).to.be.equal(0);
         expect(o.string).to.be.null;
         expect(o.boolean).to.be.false;
+        expect(o.instance).to.be.null;
         expect(o.definedDefaultInteger).to.be.equal(-1);
         expect(o.definedDefaultFloat).to.be.equal(-0.99);
         expect(o.definedDefaultString).to.be.equal('default string');
@@ -299,6 +322,7 @@ describe('toJSON', () => {
         expect(o.float).to.be.equal(0);
         expect(o.string).to.be.null;
         expect(o.boolean).to.be.false;
+        expect(o.instance).to.be.null;
         expect(o.definedDefaultInteger).to.be.equal(-1);
         expect(o.definedDefaultFloat).to.be.equal(-0.99);
         expect(o.definedDefaultString).to.be.equal('default string');
