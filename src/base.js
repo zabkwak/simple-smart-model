@@ -95,6 +95,18 @@ export default class BaseModel {
     }
 
     /**
+     * Sets the default data.
+     * 
+     * @param {Object.<string, any>} data 
+     * @protected
+     */
+    _setData(data) {
+        this._getProperties().forEach((property) => {
+            this[property] = property.cast(data[property.name]);
+        });
+    }
+
+    /**
      * Gets the value of the key in the data of the model.
      * 
      * @param {string} key Name of the property

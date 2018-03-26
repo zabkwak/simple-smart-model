@@ -1,6 +1,8 @@
 import { expect } from 'chai';
 
-import { BaseModel, Type } from '../src';
+import { BaseModel as Base, Type } from '../src';
+
+class BaseModel extends Base { }
 
 // TODO remove done
 // TODO chai throw function
