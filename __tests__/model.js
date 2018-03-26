@@ -21,11 +21,12 @@ BaseModel
     .addProperty('definedDefaultInteger', Type.integer, false, -1)
     .addProperty('definedDefaultFloat', Type.float, false, -0.99)
     .addProperty('definedDefaultString', Type.string, false, 'default string')
+    .addProperty('definedDefaultBoolean', Type.boolean, false, true)
     .addProperty('definedDefaultObject', Type.object, false, {});
 
-const fields = ['integer', 'float', 'string', 'boolean', 'object', 'definedDefaultInteger', 'definedDefaultFloat', 'definedDefaultString', 'definedDefaultObject'];
+const fields = ['integer', 'float', 'string', 'boolean', 'object', 'definedDefaultInteger', 'definedDefaultFloat', 'definedDefaultString', 'definedDefaultBoolean', 'definedDefaultObject'];
 
-const json = '{"integer":0,"float":0,"string":null,"boolean":false,"object":null,"definedDefaultInteger":-1,"definedDefaultFloat":-0.99,"definedDefaultString":"default string","definedDefaultObject":{}}';
+const json = '{"integer":0,"float":0,"string":null,"boolean":false,"object":null,"definedDefaultInteger":-1,"definedDefaultFloat":-0.99,"definedDefaultString":"default string","definedDefaultBoolean":true,"definedDefaultObject":{}}';
 
 describe('Model properties', () => {
 
@@ -62,6 +63,7 @@ describe('Model default values', () => {
 
     it('checks if the instance of the model has boolean default values', (done) => {
         expect(instance.boolean).to.be.false;
+        expect(instance.definedDefaultBoolean).to.be.true;
         done();
     });
 

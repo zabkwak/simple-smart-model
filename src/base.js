@@ -6,7 +6,9 @@ import Property from './property';
 
 export default class BaseModel {
 
+    /** @type {Object.<string, any>} */
     _data = {};
+    /** @type {Object.<string, any>} */
     _changed = {};
 
     /**
@@ -83,7 +85,7 @@ export default class BaseModel {
 
     /**
      * Saves the model. 
-     * @todo 
+     * @todo required fields
      */
     save() {
         for (let key in this._changed) {

@@ -9,7 +9,6 @@ const castError = (type, value) => {
 
 describe('Integer type', () => {
 
-    // Línej programátor
     const valid = [5, '5', 5.5, '5abc'];
     const invalid = [null, undefined, 'abc5', new Date(), { a: 5 }, [5], { 5: 5 }];
 
@@ -34,7 +33,7 @@ describe('Boolean type', () => {
         f.forEach(value => expect(Type.boolean.isValid(value)).to.be.true);
     });
 
-    it('casts the values to the integer', () => {
+    it('casts the values to the boolean', () => {
         t.forEach(value => expect(Type.boolean.cast(value)).to.be.true);
         f.forEach(value => expect(Type.boolean.cast(value)).to.be.false);
     });
@@ -42,7 +41,9 @@ describe('Boolean type', () => {
 
 describe('Object type', () => {
 
-    const valid = [null, {}, { a: 5 }, [], [5]];
+    class Test { }
+
+    const valid = [null, {}, { a: 5 }, [], [5], new Date(), new Test(), new Error()];
     const invalid = [undefined, true, false, 5, 5.5];
 
     it('checks the validators', () => {
@@ -50,7 +51,7 @@ describe('Object type', () => {
         invalid.forEach(value => expect(Type.object.isValid(value)).to.be.false);
     });
 
-    /*it('casts the values to the integer', () => {
+    /*it('casts the values to the boolean', () => {
         t.forEach(value => expect(Type.boolean.cast(value)).to.be.true);
         f.forEach(value => expect(Type.boolean.cast(value)).to.be.false);
     });*/

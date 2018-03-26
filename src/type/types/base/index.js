@@ -10,6 +10,10 @@ export default class Type {
         return this.constructor.name;
     }
 
+    getJSDOCType() {
+        return 'any';
+    }
+
     isValid(value) {
         try {
             this.cast(value);
