@@ -1,4 +1,4 @@
-import { expect, assert } from 'chai';
+import chai, { expect, assert } from 'chai';
 import Error from 'smart-error';
 
 import { RemoteModel, Type } from '../src';
@@ -11,22 +11,32 @@ const validateError = (error, code) => {
     expect(error.code).to.be.equal(code);
 }
 
-function isError(e) {
-    if (typeof e === 'string') {
-        return Promise.reject(new Error(e));
-    }
-    return Promise.resolve(e);
-}
-
 describe('Not implemented methods', () => {
 
     class Child extends RemoteModel { }
     const instance = new Child();
 
     it('rejects the promise because the _create method is not implemented', async () => {
-        // expect(instance.save.bind(instance)).to.throw(Error).that.has.property('code', 'ERR_NOT_IMPLEMENTED');
+        //return expect(instance.save()).to.be.rejectedWith(Error).that.has.property('code', 'ERR_NOT_IMPLEMENTED');
+        // return expect(Promise.reject(new Error())).should.be.rejectedWith(Error);
+        //await expect(instance.save).to.throw(Error).that.has.property('code', 'ERR_NOT_IMPLEMENTED');
+        try {
+            await instance.save();
+            throw new Error('The promise should reject', 'required_rejection');
+        } catch (error) {
+            if (error.code === 'ERR_REQUIRED_REJECTION') {
+                throw error;
+            }
+            expect(error).to.be.an('object');
+            expect(error).to.be.an.instanceOf(Error);
+            expect(error).to.have.all.keys(['message', 'code', 'class', 'method']);
+            expect(error.code).to.be.equal('ERR_NOT_IMPLEMENTED');
+            expect(error.class).to.be.equal('Child');
+            expect(error.method).to.be.equal('_create');
 
-        instance.save().catch(isError).then((error) => {
+        }
+        /*
+        instance.save().then(() => Promise.reject('Expected method to reject.')).catch(isError).then((error) => {
             expect(error).to.be.an('object');
             expect(error).to.be.an.instanceOf(Error);
             expect(error).to.have.all.keys(['message', 'code', 'class', 'method']);
@@ -34,6 +44,7 @@ describe('Not implemented methods', () => {
             expect(error.class).to.be.equal('Child');
             expect(error.method).to.be.equal('_create');
         });
+        */
     });
 });
 
@@ -123,9 +134,23 @@ describe('CRUD', () => {
         expect(instance.created_time).to.be.null;
         expect(instance.updated_time).to.be.null;
         await instance.delete();
-
+        try {
+            await new Child(1).load();
+            throw new Error('The promise should reject', 'required_rejection');
+        } catch (error) {
+            if (error.code === 'ERR_REQUIRED_REJECTION') {
+                throw error;
+            }
+            expect(error).to.be.an('object');
+            expect(error).to.be.an.instanceOf(Error);
+            expect(error).to.have.all.keys(['message', 'code', 'class', 'id']);
+            expect(error.code).to.be.equal('ERR_OBJECT_NOT_FOUND');
+            expect(error.class).to.be.equal('Child');
+            expect(error.id).to.be.equal(1);
+        }
+        /*
         const inst = new Child(1);
-        inst.load().catch(isError).then((error) => {
+        inst.load().then(() => Promise.reject('Expected method to reject.')).catch(isError).then((error) => {
             expect(error).to.be.an('object');
             expect(error).to.be.an.instanceOf(Error);
             expect(error).to.have.all.keys(['message', 'code', 'class', 'id']);
@@ -133,6 +158,6 @@ describe('CRUD', () => {
             expect(error.class).to.be.equal('Child');
             expect(error.id).to.be.equal(1);
         });
-
+        */
     });
 });
