@@ -1,7 +1,7 @@
 import Error from 'smart-error';
 import uniqid from 'uniqid';
 
-import BaseType from './type/types/base';
+import BaseType from 'runtime-type/dist/types/base';
 import Property from './property';
 
 export default class BaseModel {

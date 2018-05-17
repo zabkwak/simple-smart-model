@@ -1,6 +1,6 @@
 import Error from 'smart-error';
+import Type from 'runtime-type';
 import Base from './base';
-import Type from './type';
 
 /**
  * Class for handling base models in the databases or remote apis. 

@@ -1,4 +1,4 @@
-import BaseType from './type/types/base';
+import BaseType from 'runtime-type/dist/types/base';
 
 export default class Property {
 
