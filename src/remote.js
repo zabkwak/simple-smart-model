@@ -1,5 +1,6 @@
 import Error from 'smart-error';
 import Type from 'runtime-type';
+
 import Base from './base';
 
 /**

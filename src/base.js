@@ -1,7 +1,7 @@
 import Error from 'smart-error';
 import uniqid from 'uniqid';
+import Type from 'runtime-type';
 
-import BaseType from 'runtime-type/dist/types/base';
 import Property from './property';
 
 export default class BaseModel {
@@ -39,12 +39,12 @@ export default class BaseModel {
      * Adds the property to the class.
      * 
      * @param {string} name 
-     * @param {BaseType} type 
+     * @param {Type.Type} type 
      * @param {boolean} required 
      * @param {*} defaultValue 
      */
     static addProperty(name, type, required = false, defaultValue = null) {
-        if (!(type instanceof BaseType)) {
+        if (!(type instanceof Type.Type)) {
             throw new Error('type is not instance of BaseType', 'unsupported_operation');
         }
         this._properties.push(new Property(name, type, required, defaultValue));
@@ -76,7 +76,7 @@ export default class BaseModel {
             fields = null;
         }
         this._getProperties().forEach((property) => {
-            if (fields === null || fields.indexOf(property.name) >= 0) {
+            if (fields === null || fields.includes(property.name)) {
                 o[property.name] = this._get(property.name, false);
             }
         });
@@ -85,6 +85,7 @@ export default class BaseModel {
 
     /**
      * Saves the model. 
+     * 
      * @todo required fields
      */
     save() {

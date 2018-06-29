@@ -1,11 +1,11 @@
-import BaseType from 'runtime-type/dist/types/base';
+import Type from 'runtime-type';
 
 export default class Property {
 
     /**
      * 
      * @param {string} name 
-     * @param {BaseType} type 
+     * @param {Type.Type} type 
      * @param {boolean} required 
      * @param {*} defaultValue 
      */
