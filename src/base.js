@@ -103,6 +103,9 @@ export default class BaseModel {
      */
     _setData(data) {
         this._getProperties().forEach((property) => {
+            if (data[property.name] === undefined) {
+                return;
+            }
             this[property] = property.cast(data[property.name]);
         });
     }
