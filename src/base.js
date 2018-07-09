@@ -106,7 +106,7 @@ export default class BaseModel {
             if (data[property.name] === undefined) {
                 return;
             }
-            this[property.name] = property.cast(data[property.name]);
+            this._data[property.name] = property.cast(data[property.name]);
         });
     }
 
