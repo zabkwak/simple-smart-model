@@ -74,16 +74,16 @@ export default class RemoteModel extends Base {
                 reject(new Error(`Instance of ${this.constructor.name} with id ${this.id} not found`, 'object_not_found', { class: this.constructor.name, id: this.id }));
                 return;
             }
-            const active = Type.boolean.cast(result.active);
+            /*const active = Type.boolean.cast(result.active);
             if (!active) {
                 reject(new Error(`Instance of ${this.constructor.name} with id ${this.id} not found`, 'object_not_found', { class: this.constructor.name, id: this.id }));
                 return;
-            }
+            }*/
             this._setData(result);
             this._loaded = true;
             this.created_time = Type.date.cast(result.created_time);
             this.updated_time = Type.date.cast(result.updated_time);
-            this.active = active;
+            this.active = true;
             resolve(this);
         });
     }
